@@ -10,22 +10,6 @@ import numpy as np
 #Load the model that is saved
 model = load_model('mnist.h5')
 
-def get_handle():
-    """This function uses the wingui library to get the window handles of all the active windows.
-    Then, the window with the name as 'tk' is selected and its handle is returned."""
-    toplist = []
-    windows_list = []
-    canvas = 0
-    def enum_win(hwnd, result):
-        win_text = win32gui.GetWindowText(hwnd)
-        #print(hwnd, win_text)
-        windows_list.append((hwnd, win_text))
-    win32gui.EnumWindows(enum_win, toplist)
-    for (hwnd, win_text) in windows_list:
-        if 'tk' == win_text:
-            canvas = hwnd
-    return canvas
-
 def preprocessing_image():
     """function to preprocess the image to"""
     image = cv2.imread('test.jpg')
@@ -55,9 +39,6 @@ def preprocessing_image():
     prepro = np.array(preprocessed_digit)
     prepro = prepro[x_args]
     i = 0
-    for im in prepro:
-        i += 1
-        cv2.imshow("im no : "+str(i),im)
     return prepro
 
 def predict_digit(img):
@@ -100,7 +81,6 @@ class App(tk.Tk):
 
     def classify_handwriting(self):
         HWND = self.canvas.winfo_id() # get the handle of the canvas
-        hwnd = get_handle()
         rect = win32gui.GetWindowRect(HWND) # get the coordinate of the canvas
         x1, y1, x2, y2 = rect
         # print(x1,x2, y1,y2)
